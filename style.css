@@ -1,0 +1,147 @@
+@import url('https://rsms.me/inter/inter.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/fontawesome.min.css');
+
+* {
+	text-rendering: optimizeLegibility;
+}
+
+body {
+	font-family: 'Inter', sans-serif;
+	background:#212529;
+	color: #f8f9fa;
+	font-size: 1.3em;
+}
+
+h2 {
+	margin: 0;
+}
+
+.incident {
+	background: #000;
+	padding: .1em 1em;
+	margin: 0 0 1em 0;
+	border-radius: .25em;
+}
+
+.post {
+	background: #495057;
+	color: #fff;
+}
+
+.notice {
+	background: #ffd43b;
+	color: #000;
+}
+
+.alert {
+	background: #c92a2a;
+	color: #fff;
+}
+
+.item p, .item p a {
+	margin: 0;
+	color: #aaa;
+	font-size: 95%;
+}
+
+p {
+	line-height: 150%;
+}
+
+canvas:hover {
+	cursor: crosshair;
+}
+
+main {
+	max-width: 40em;
+	margin: auto;
+	padding: 1em;
+}
+
+footer {
+	text-align: center;
+	margin: 0 0 3em 0;
+	color: #888;
+	font-size: 90%;
+}
+
+a:link, a:visited, a:hover, a:active {
+	color: #f8f9fa;
+}
+
+#status {
+	background:  #343a40;
+	border-radius: .25em;
+	padding: .1em 1em;
+}
+
+#notice {
+	background:  #ffec99;
+	color: #000;
+	border-radius: .25em;
+	padding: .1em 1em;
+	margin-top: 1em;
+}
+
+.status {
+	color: #868e96;
+	font-weight: normal;
+	font-size: 65%;
+	font-family: monospace;
+	padding-left: .7em;
+}
+
+.bloops {
+	margin: .5em 0;
+}
+
+.bloop {
+	background: #555;
+	width: calc((100% / 60) - 2px);
+	height: 30px;
+	border-radius: 5px;
+	margin-right: 2px;
+	display: inline-block;
+}
+
+.bloop:hover {
+	opacity: 0.5;
+	cursor: help;
+}
+
+.bloops p {
+	background: #495057;
+	padding: .5em;
+	border-radius: .25em;
+}
+
+.bloop.good { background: #51cf66; }
+.bloop.bad { background: #fa5252; }
+.bloop.meh { background: #ffd43b; }
+
+.item {
+	margin: 3em 0;
+}
+
+.good { color: #51cf66; }
+.bad { color: #fa5252; }
+.meh { color: #ffd43b; }
+
+.bloops {
+	position: relative;
+}
+
+.bloop_info {
+	position: absolute;
+	top: 2em; left: 0em;
+	background: #fff;
+	padding: 1em;
+	opacity: 1;
+	z-index: 100;
+}
+
+@media (max-width: 500px) {
+	body {
+		font-size: 1em;
+	}
+}
