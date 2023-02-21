@@ -55,7 +55,7 @@ foreach($monitors as $monitor => $url) {
 	$log = json_decode(file_get_contents(PATH.'/monitors/'.$monitor), TRUE);
 	$last = $log[array_key_last($log)];
 	
-	if(is_numeric($last['response'])) {
+	if(is_numeric($last['response']) && $last['response'] >= 200 && $last['response'] < 300) {
 		$last = ' <span class="status">HTTP/1.1 '.$last['response'].'</span>';
 		$class = 'good';
 		$graph_color = '#51cf66';
@@ -97,7 +97,11 @@ foreach($monitors as $monitor => $url) {
 		$data[] = @$arr['time'];
 		
 		if(@$arr['time'] > 0) {
-			echo '<span class="bloop good" data-status="Up" data-time="'.date("H:i", $arr['timestamp']).'" data-response="'.$arr['response'].'" data-ms="'.$arr['time'].'" data-status="Up at '.date("H:i", $arr['timestamp']).'" title="Up at '.date("H:i", $arr['timestamp']).' ('.$arr['time'].' ms)"></span>';
+			if(@$arr['response'] >= 200 && @$arr['response'] < 300) {
+				echo '<span class="bloop good" data-status="Up" data-time="'.date("H:i", $arr['timestamp']).'" data-response="'.$arr['response'].'" data-ms="'.$arr['time'].'" data-status="Up at '.date("H:i", $arr['timestamp']).'" title="Up at '.date("H:i", $arr['timestamp']).' ('.$arr['time'].' ms)"></span>';
+			} else {
+				echo '<span class="bloop bad" data-status="Down" data-time="'.date("H:i", $arr['timestamp']).'" data-response="'.$arr['response'].'" data-ms="'.$arr['time'].'" data-status="Down at '.date("H:i", $arr['timestamp']).'" title="Down at '.date("H:i", $arr['timestamp']).' ('.$arr['time'].' ms)"></span>';
+			}
 		}
 		else {
 			echo '<span class="bloop bad"></span>';
