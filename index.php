@@ -55,15 +55,13 @@ foreach($monitors as $monitor => $url) {
 	$log = json_decode(file_get_contents(PATH.'/monitors/'.$monitor), TRUE);
 	$last = $log[array_key_last($log)];
 	
-	if(is_numeric($last['response'])) {
+	if(is_numeric($last['response']) && $last['response'] >= 200 && $last['response'] < 300) {
 		$last = ' <span class="status">HTTP/1.1 '.$last['response'].'</span>';
 		$class = 'good';
-		$graph_color = '#51cf66';
 	}
 	else {
 		$last = ' <span class="status">HTTP/1.1 '.$last['response'].'</span>';
 		$class = 'bad';
-		$graph_color = '#fa5252';
 	}
 	
 	echo '<div class="item"><h2><span class="'.$class.'">⬤</span> '.$monitor.$last.'</h2>';
@@ -75,6 +73,7 @@ foreach($monitors as $monitor => $url) {
 	
 	$labels = array();
 	$data = array();
+	$colors = array();
 	
 	$const = 'ctx'.$i;
 	$const_chart = $const.'_'.$const;
@@ -95,9 +94,15 @@ foreach($monitors as $monitor => $url) {
 		$labels[] = "'".date("H:i", $arr['timestamp'])."'";
 		
 		$data[] = @$arr['time'];
+
+		$colors[] = @$arr['response'] >= 200 && @$arr['response'] < 300 ? "'#51cf66'" : "'#fa5252'";
 		
 		if(@$arr['time'] > 0) {
-			echo '<span class="bloop good" data-status="Up" data-time="'.date("H:i", $arr['timestamp']).'" data-response="'.$arr['response'].'" data-ms="'.$arr['time'].'" data-status="Up at '.date("H:i", $arr['timestamp']).'" title="Up at '.date("H:i", $arr['timestamp']).' ('.$arr['time'].' ms)"></span>';
+			if(@$arr['response'] >= 200 && @$arr['response'] < 300) {
+				echo '<span class="bloop good" data-status="Up" data-time="'.date("H:i", $arr['timestamp']).'" data-response="'.$arr['response'].'" data-ms="'.$arr['time'].'" data-status="Up at '.date("H:i", $arr['timestamp']).'" title="Up at '.date("H:i", $arr['timestamp']).' ('.$arr['time'].' ms)"></span>';
+			} else {
+				echo '<span class="bloop bad" data-status="Down" data-time="'.date("H:i", $arr['timestamp']).'" data-response="'.$arr['response'].'" data-ms="'.$arr['time'].'" data-status="Down at '.date("H:i", $arr['timestamp']).'" title="Down at '.date("H:i", $arr['timestamp']).' ('.$arr['time'].' ms)"></span>';
+			}
 		}
 		else {
 			echo '<span class="bloop bad"></span>';
@@ -120,6 +125,7 @@ foreach($monitors as $monitor => $url) {
 	
 	$labels = implode(', ', $labels);
 	$data = implode(', ', $data);
+	$colors = implode(', ', $colors);
 	
 	$out = <<<EOD
 <canvas id="$chart_id" width="300" height="100"></canvas>
@@ -132,8 +138,12 @@ const $const_chart = new Chart($const, {
 		datasets: [{
 			label: 'response time',
 			data: [$data],
-			backgroundColor: '$graph_color',
-			borderColor: '$graph_color',
+			pointBackgroundColor: [$colors],
+			pointBorderColor: [$colors],
+			segment: {
+				backgroundColor: ctx => ctx.p1.options.backgroundColor,
+				borderColor: ctx => ctx.p1.options.borderColor
+			},
 			borderWidth: 2,
 			tension: .4
 		}]
