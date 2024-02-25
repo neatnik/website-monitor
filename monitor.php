@@ -27,7 +27,7 @@ foreach($monitors as $name => $url) {
 	curl_setopt($curl, CURLOPT_HEADER, true);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	$response = curl_exec($curl);
-	if(curl_exec($curl) === false) {
+	if($response === false) {
 		$response_data[$timestamp]['error'] = curl_error($curl);
 	}
 	else {
